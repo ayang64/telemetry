@@ -40,33 +40,33 @@ create table "authtoken" (
 
 drop table if exists "temperature";
 create table "temperature" (
-	id				integer generated always as identity,	
-	device		integer references "device" (id) on delete cascade,
-	time			timestamp default localtimestamp,	-- time this measurement was taken
-	value			numeric(5,2)											-- assume that we're going to store temps up to 999.99
+	id				integer generated always as identity not null,	
+	device		integer references "device" (id) on delete cascade not null,
+	time			timestamp default localtimestamp not null,	-- time this measurement was taken
+	value			numeric(5,2) not null											-- assume that we're going to store temps up to 999.99
 );
 
 drop table if exists "humidity";
 create table "humidity" (
-	id				integer generated always as identity,	
-	device		integer references "device" (id) on delete cascade,
-	time			timestamp default localtimestamp,	-- time this measurement was taken
-	value			numeric(5,2)											-- assume that we're going to store temps up to 999.99
+	id				integer generated always as identity not null,	
+	device		integer references "device" (id) on delete cascade not null,
+	time			timestamp default localtimestamp not null,-- time this measurement was taken
+	value			numeric(5,2) not null											-- assume that we're going to store temps up to 999.99
 );
 
 
 drop table if exists "co2";
 create table "co2" (
-	id				integer generated always as identity,	
-	device		integer references "device" (id) on delete cascade,
-	time			timestamp default localtimestamp,	-- time this measurement was taken
-	value			numeric(5,2)											-- assume that we're going to store temps up to 999.99
+	id				integer generated always as identity not null,	
+	device		integer references "device" (id) on delete cascade not null,
+	time			timestamp default localtimestamp not null,	-- time this measurement was taken
+	value			numeric(5,2) not null											-- assume that we're going to store temps up to 999.99
 );
 
 drop table if exists "health";
 create table "health" (
-	id				integer generated always as identity,	
-	device		integer references "device" (id) on delete cascade,
-	time			timestamp default localtimestamp,	-- time this measurement was taken
-	value			text check (char_length(value) <= 150)
+	id				integer generated always as identity not null,	
+	device		integer references "device" (id) on delete cascade not null,
+	time			timestamp default localtimestamp not null,	-- time this measurement was taken
+	value			text check (char_length(value) <= 150) not null
 );
