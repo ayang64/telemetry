@@ -3,18 +3,18 @@ create extension if not exists "pgcrypto";
 drop table if exists "user" cascade;
 create table "user" (
 	id		integer unique generated always as identity,
-	name	text,
-	email	text
+	email	text unique
 );
 
 drop table if exists device cascade;
 create table device (
 	id			integer unique generated always as identity,
+	owner		integer	references "user" (id) on delete cascade,
 	serial	text unique
 );
 
 -- bootstrap database with a user
-insert into "user" (name, email) values ('ayan george', 'ayan@ayan.net');
+-- insert into "user" (name, email) values ('ayan george', 'ayan@ayan.net');
 
 drop table if exists "authkey" cascade;
 create table "authkey" (
@@ -24,19 +24,19 @@ create table "authkey" (
 );
 
 -- generate an authkey for our 'ayan@ayan.net' user
-insert into "authkey" ("user") values ( (select id from "user" where email='ayan@ayan.net')) returning key;
+-- insert into "authkey" ("user") values ( (select id from "user" where email='ayan@ayan.net')) returning key;
 
 drop table if exists "authtoken";
 create table "authtoken" (
 	id				integer generated always as identity,
-	authkey		integer references "authkey" (id) on delete cascade,
-	key				uuid default gen_random_uuid(),
+	authkey		integer references "authkey" (id) on delete cascade not null,
+	token			uuid default gen_random_uuid(),
 	created		timestamp default localtimestamp,
 	accessed	timestamp default localtimestamp
 );
 
 -- request an auth token for our key
-insert into "authtoken" (authkey) values ( (select id from "authkey" where id=1)) returning key, created, accessed;
+-- insert into "authtoken" (authkey) values ( (select id from "authkey" where id=1)) returning key, created, accessed;
 
 drop table if exists "temperature";
 create table "temperature" (
